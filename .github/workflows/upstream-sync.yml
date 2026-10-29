@@ -1,0 +1,93 @@
+name: Upstream Sync
+
+on:
+  schedule:
+    # Run automatically every day at 04:00 UTC
+    - cron: '0 4 * * *'
+  workflow_dispatch:
+    inputs:
+      upstream_branch:
+        description: 'Upstream branch to sync from'
+        required: true
+        default: 'main'
+      target_branch:
+        description: 'Target branch to update in this repo'
+        required: true
+        default: 'main'
+
+jobs:
+  sync:
+    name: Sync with Upstream
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+      issues: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.inputs.target_branch || 'main' }}
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Configure Git Author
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Add and Fetch Upstream
+        run: |
+          git remote add upstream https://github.com/comaps/comaps.git || git remote set-url upstream https://github.com/comaps/comaps.git
+          git fetch upstream --tags --prune
+          git fetch upstream ${{ github.event.inputs.upstream_branch || 'main' }}
+
+      - name: Merge Upstream Changes
+        id: merge
+        run: |
+          UPSTREAM_REF="upstream/${{ github.event.inputs.upstream_branch || 'main' }}"
+          echo "Attempting to merge ${UPSTREAM_REF}..."
+          
+          if git merge --no-edit "${UPSTREAM_REF}"; then
+            echo "merge_success=true" >> "$GITHUB_OUTPUT"
+            echo "Successfully merged upstream changes without conflicts."
+          else
+            echo "merge_success=false" >> "$GITHUB_OUTPUT"
+            echo "Merge conflicts detected."
+            git merge --abort
+            exit 1
+          fi
+
+      - name: Push Merged Changes
+        if: steps.merge.outputs.merge_success == 'true'
+        run: |
+          git push origin ${{ github.event.inputs.target_branch || 'main' }}
+          echo "Pushed updated upstream changes successfully."
+
+      - name: Notify on Merge Conflict
+        if: failure()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const issueTitle = `⚠️ Upstream Sync Conflict in branch '${context.payload.inputs?.target_branch || 'main'}'`;
+            const issueBody = `Automated upstream sync failed due to merge conflicts with upstream \`comaps/comaps\`.
+            
+            ### Steps to resolve locally:
+            \`\`\`bash
+            git checkout ${context.payload.inputs?.target_branch || 'main'}
+            git fetch upstream
+            git merge upstream/main
+            # Resolve any conflicts in modified files
+            git commit
+            git push origin ${context.payload.inputs?.target_branch || 'main'}
+            \`\`\`
+            
+            *Note: Custom Destination Arrival Alarm files are isolated in \`app.organicmaps.alarm\` to minimize conflict risk.*`;
+            
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: issueTitle,
+              body: issueBody
+            });

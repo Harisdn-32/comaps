@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <!-- Destination Arrival Alarm Settings -->
+  <string name="pref_arrival_alarm_category_title">Destination Arrival Alarm</string>
+  <string name="pref_arrival_alarm_enabled" translatable="false">arrival_alarm_enabled</string>
+  <string name="pref_arrival_alarm_title">Arrival alarm</string>
+  <string name="pref_arrival_alarm_summary">Sound a full-screen alarm when you are within the set distance to your destination</string>
+  <string name="pref_arrival_alarm_radius" translatable="false">arrival_alarm_radius</string>
+  <string name="pref_arrival_alarm_radius_title">Alarm trigger distance</string>
+  <string name="pref_arrival_alarm_radius_summary">Trigger alarm within %s of destination</string>
+
+  <!-- Notification & Full-Screen UI -->
+  <string name="arrival_alarm_channel_name">Destination Arrival Alarm</string>
+  <string name="arrival_alarm_channel_description">High priority alert when approaching your navigation destination</string>
+  <string name="arrival_alarm_notification_title">Approaching Destination!</string>
+  <string name="arrival_alarm_notification_text">You are within %s of your destination.</string>
+  <string name="arrival_alarm_full_screen_title">Approaching Destination!</string>
+  <string name="arrival_alarm_full_screen_subtitle">You have entered your designated arrival radius.</string>
+  <string name="arrival_alarm_distance_remaining">Distance remaining: %s</string>
+  <string name="arrival_alarm_dismiss">Dismiss Alarm</string>
+  <string name="arrival_alarm_view_map">View Map</string>
+  <string name="arrival_alarm_destination_default">Destination</string>
+</resources>

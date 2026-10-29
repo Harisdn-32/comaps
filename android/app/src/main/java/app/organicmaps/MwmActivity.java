@@ -52,6 +52,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
+import app.organicmaps.alarm.ArrivalAlarmManager;
 import app.organicmaps.api.Const;
 import app.organicmaps.backup.PeriodicBackupRunner;
 import app.organicmaps.base.BaseMwmFragmentActivity;
@@ -1696,6 +1697,7 @@ public class MwmActivity extends BaseMwmFragmentActivity
 
     mRoutingPlanInplaceController.hideRoutingOptionsView();
     NavigationService.stopService(this);
+    ArrivalAlarmManager.getInstance(this).onNavigationStopped(this);
     mMapButtonsViewModel.setSearchOption(null);
     mMapButtonsViewModel.setLayoutMode(MapButtonsController.LayoutMode.regular);
     refreshLightStatusBar();
@@ -1963,6 +1965,7 @@ public class MwmActivity extends BaseMwmFragmentActivity
 
     RoutingInfo info = Framework.nativeGetRouteFollowingInfo();
     routing.updateCachedRoutingInfo(info);
+    ArrivalAlarmManager.getInstance(this).onRouteFollowingInfo(this, info, location);
     mNavigationController.update(info);
   }
 

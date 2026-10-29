@@ -32,6 +32,7 @@ import androidx.core.content.ContextCompat;
 import app.organicmaps.MwmActivity;
 import app.organicmaps.MwmApplication;
 import app.organicmaps.R;
+import app.organicmaps.alarm.ArrivalAlarmManager;
 import app.organicmaps.provider.NavigationContract;
 import app.organicmaps.sdk.Framework;
 import app.organicmaps.sdk.location.LocationHelper;
@@ -182,6 +183,7 @@ public class NavigationService extends Service implements LocationListener
     mCarNotificationExtender = null;
     MwmApplication.from(this).getLocationHelper().removeListener(this);
     TtsPlayer.INSTANCE.stop();
+    ArrivalAlarmManager.getInstance(this).onNavigationStopped(this);
 
     // The notification is cancelled automatically by the system.
 
@@ -302,6 +304,7 @@ public class NavigationService extends Service implements LocationListener
       mPlayer.playback(R.raw.speed_cams_beep);
 
     RoutingController.get().updateCachedRoutingInfo(routingInfo);
+    ArrivalAlarmManager.getInstance(this).onRouteFollowingInfo(this, routingInfo, location);
     getContentResolver().notifyChange(NavigationContract.LIVE_NAVIGATION_DATA_URI, null);
 
     // Don't spend time on updating RemoteView if notifications are not allowed.

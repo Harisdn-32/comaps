@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?android:attr/colorBackground"
+    android:keepScreenOn="true"
+    android:padding="24dp">
+
+  <!-- Top spacer / guide -->
+  <androidx.constraintlayout.widget.Guideline
+      android:id="@+id/guide_top"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:orientation="horizontal"
+      app:layout_constraintGuide_percent="0.10" />
+
+  <!-- Alarm Icon with pulsing background -->
+  <FrameLayout
+      android:id="@+id/icon_container"
+      android:layout_width="140dp"
+      android:layout_height="140dp"
+      android:background="@drawable/bg_alarm_pulse"
+      app:layout_constraintTop_toBottomOf="@id/guide_top"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintEnd_toEndOf="parent">
+
+    <ImageView
+        android:id="@+id/alarm_icon"
+        android:layout_width="72dp"
+        android:layout_height="72dp"
+        android:layout_gravity="center"
+        android:src="@drawable/ic_alarm_bell"
+        app:tint="@color/dark_red"
+        android:contentDescription="@string/arrival_alarm_channel_name" />
+  </FrameLayout>
+
+  <!-- Title -->
+  <com.google.android.material.textview.MaterialTextView
+      android:id="@+id/alarm_title"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="24dp"
+      android:gravity="center"
+      android:text="@string/arrival_alarm_full_screen_title"
+      android:textAppearance="?attr/textAppearanceHeadlineSmall"
+      android:textStyle="bold"
+      app:layout_constraintTop_toBottomOf="@id/icon_container"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintEnd_toEndOf="parent" />
+
+  <!-- Subtitle -->
+  <com.google.android.material.textview.MaterialTextView
+      android:id="@+id/alarm_subtitle"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="8dp"
+      android:gravity="center"
+      android:text="@string/arrival_alarm_full_screen_subtitle"
+      android:textAppearance="?attr/textAppearanceBodyMedium"
+      android:textColor="?android:attr/textColorSecondary"
+      app:layout_constraintTop_toBottomOf="@id/alarm_title"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintEnd_toEndOf="parent" />
+
+  <!-- Info Card for Destination and Distance -->
+  <com.google.android.material.card.MaterialCardView
+      android:id="@+id/info_card"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="24dp"
+      app:cardCornerRadius="16dp"
+      app:cardElevation="2dp"
+      app:strokeWidth="1dp"
+      app:strokeColor="@color/black_12"
+      app:layout_constraintTop_toBottomOf="@id/alarm_subtitle"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintEnd_toEndOf="parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="20dp"
+        android:gravity="center">
+
+      <com.google.android.material.textview.MaterialTextView
+          android:id="@+id/alarm_destination_title"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:gravity="center"
+          android:text="@string/arrival_alarm_destination_default"
+          android:textAppearance="?attr/textAppearanceTitleMedium"
+          android:textStyle="bold"
+          tools:text="Central Station" />
+
+      <com.google.android.material.textview.MaterialTextView
+          android:id="@+id/alarm_distance_remaining"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="8dp"
+          android:gravity="center"
+          android:textAppearance="?attr/textAppearanceBodyLarge"
+          android:textColor="@color/dark_red"
+          android:textStyle="bold"
+          tools:text="Distance remaining: 450 m" />
+    </LinearLayout>
+  </com.google.android.material.card.MaterialCardView>
+
+  <!-- Bottom Buttons Guide -->
+  <androidx.constraintlayout.widget.Guideline
+      android:id="@+id/guide_bottom"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:orientation="horizontal"
+      app:layout_constraintGuide_percent="0.95" />
+
+  <!-- View Map Button -->
+  <com.google.android.material.button.MaterialButton
+      android:id="@+id/btn_view_map"
+      style="@style/Widget.Material3.Button.OutlinedButton"
+      android:layout_width="0dp"
+      android:layout_height="56dp"
+      android:layout_marginBottom="12dp"
+      android:text="@string/arrival_alarm_view_map"
+      android:textSize="16sp"
+      app:layout_constraintBottom_toTopOf="@id/btn_dismiss_alarm"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintEnd_toEndOf="parent" />
+
+  <!-- Dismiss Button -->
+  <com.google.android.material.button.MaterialButton
+      android:id="@+id/btn_dismiss_alarm"
+      style="@style/Widget.Material3.Button"
+      android:layout_width="0dp"
+      android:layout_height="60dp"
+      android:backgroundTint="@color/dark_red"
+      android:text="@string/arrival_alarm_dismiss"
+      android:textColor="@android:color/white"
+      android:textSize="18sp"
+      android:textStyle="bold"
+      app:layout_constraintBottom_toTopOf="@id/guide_bottom"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintEnd_toEndOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

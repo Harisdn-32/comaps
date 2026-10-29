@@ -58,4 +58,24 @@
     android:widgetLayout="@layout/preference_switch"
     app:singleLineTitle="false" />
 
+  <PreferenceCategory
+    android:title="@string/pref_arrival_alarm_category_title">
+    <SwitchPreferenceCompat
+      android:defaultValue="true"
+      android:key="@string/pref_arrival_alarm_enabled"
+      android:title="@string/pref_arrival_alarm_title"
+      android:summary="@string/pref_arrival_alarm_summary"
+      android:widgetLayout="@layout/preference_switch"
+      app:icon="@drawable/ic_alarm_bell"
+      app:singleLineTitle="false" />
+    <ListPreference
+      android:defaultValue="500"
+      android:dependency="@string/pref_arrival_alarm_enabled"
+      android:entries="@array/arrival_alarm_radius_entries"
+      android:entryValues="@array/arrival_alarm_radius_values"
+      android:key="@string/pref_arrival_alarm_radius"
+      android:title="@string/pref_arrival_alarm_radius_title"
+      app:useSimpleSummaryProvider="true" />
+  </PreferenceCategory>
+
 </androidx.preference.PreferenceScreen>

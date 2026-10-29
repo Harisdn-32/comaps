@@ -46,6 +46,8 @@
     Services (FGS)) notifications from an app.
   //-->
   <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+  <uses-permission android:name="android.permission.VIBRATE"/>
+  <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT"/>
 
   <uses-permission android:name="androidx.car.app.NAVIGATION_TEMPLATES"/>
   <uses-permission android:name="androidx.car.app.ACCESS_SURFACE"/>
@@ -513,6 +515,29 @@
         android:exported="false"
         android:enabled="true"
         android:stopWithTask="false"/>
+
+    <!-- Destination Arrival Alarm -->
+    <activity
+        android:name="app.organicmaps.alarm.ArrivalAlarmActivity"
+        android:showWhenLocked="true"
+        android:turnScreenOn="true"
+        android:excludeFromRecents="true"
+        android:launchMode="singleTask"
+        android:configChanges="orientation|screenSize|screenLayout|keyboardHidden"
+        android:theme="@style/MwmTheme"
+        android:exported="false" />
+
+    <service
+        android:name="app.organicmaps.alarm.ArrivalAlarmService"
+        android:exported="false" />
+
+    <receiver
+        android:name="app.organicmaps.alarm.ArrivalAlarmReceiver"
+        android:exported="false">
+      <intent-filter>
+        <action android:name="app.organicmaps.alarm.ACTION_DISMISS_ALARM" />
+      </intent-filter>
+    </receiver>
 
     <!-- Service to hold and persist app locales across restarts for Android 12 and below devices -->
     <service

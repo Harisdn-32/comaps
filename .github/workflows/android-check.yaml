@@ -24,7 +24,9 @@ jobs:
 
       - name: Parallel submodules checkout
         shell: bash
-        run: git submodule update --depth 1 --init --recursive --jobs=$(($(nproc) * 20))
+        run: |
+          git submodule sync --recursive
+          git submodule update --depth 1 --init --recursive --jobs=$(($(nproc) * 20))
 
       - name: Install Python venv
         shell: bash
@@ -86,7 +88,9 @@ jobs:
 
       - name: Parallel submodules checkout
         shell: bash
-        run: git submodule update --depth 1 --init --recursive --jobs=$(($(nproc) * 20))
+        run: |
+          git submodule sync --recursive
+          git submodule update --depth 1 --init --recursive --jobs=$(($(nproc) * 20))
 
       - name: Configure ccache
         uses: hendrikmuhs/ccache-action@v1.2

@@ -46,6 +46,8 @@ jobs:
   android-check:
     name: Build Android apps
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     strategy:
       fail-fast: false
       matrix:
@@ -112,3 +114,16 @@ jobs:
           name: android-${{ matrix.flavor }}
           path: android/app/build/outputs/apk/**/CoMaps-*.apk
           if-no-files-found: error
+
+      - name: Publish to GitHub Releases
+        uses: softprops/action-gh-release@v2
+        if: success()
+        with:
+          tag_name: build-${{ github.run_number }}
+          name: "CoMaps Build ${{ github.run_number }} (Destination Arrival Alarm)"
+          body: |
+            ### CoMaps Android Release
+            Built from commit `${{ github.sha }}` with **Destination Arrival Alarm** feature.
+          files: android/app/build/outputs/apk/**/CoMaps-*.apk
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

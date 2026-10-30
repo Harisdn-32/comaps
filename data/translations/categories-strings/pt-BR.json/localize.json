@@ -1328,7 +1328,7 @@
     "@cuisine_all_vegetarian": {
         "defaultMessage": "Vegetariana"
     },
-    "cuisine-vegan|@cuisine_all_vegetarian": {
+    "cuisine-vegan|cuisine-vegan_only|@cuisine_all_vegetarian": {
         "defaultMessage": "Vegana"
     },
     "shop-games|@shop": {
@@ -1345,5 +1345,8 @@
     },
     "amenity-love_hotel": {
         "defaultMessage": "Motel|Pé quebrado|Treme-treme|Casa da Barbie|Alcovita|Chupadouro"
+    },
+    "amenity-research_institute": {
+        "defaultMessage": "Centro de pesquisa|Instituto de pesquisa|Pesquisa|4Laboratório|U+1F52C|U+1F9EA"
     }
 }

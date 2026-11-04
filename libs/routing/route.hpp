@@ -194,7 +194,19 @@ public:
 
   Segment const & GetSegment() const { return m_segment; }
   Segment & GetSegment() { return m_segment; }
+
+  /**
+   * @brief Returns the point at the end of this segment.
+   *
+   * The end of the segment is the point that is furthest from the beginning of the route, i.e. the
+   * point shared between this segment and the following one (or the destination for the last segment.)
+   *
+   * This does not necessarily represent the last point of this segment (or the first point of the
+   * following segment) as stored in the map. If the route uses only part of the segment, this point
+   * can be located anywhere on the current segment, or anywhere on the next segment.
+   */
   geometry::PointWithAltitude const & GetJunction() const { return m_junction; }
+
   RoadNameInfo const & GetRoadNameInfo() const { return m_roadNameInfo; }
   turns::TurnItem const & GetTurn() const { return m_turn; }
   void ClearTurnLanes() { m_turn.m_lanes.clear(); }
@@ -501,6 +513,7 @@ public:
 
   void GetTurnsForTesting(std::vector<turns::TurnItem> & turns) const;
   bool IsRouteId(uint64_t routeId) const { return routeId == m_routeId; }
+  uint64_t GetRouteId() const { return m_routeId; }
 
   /// \returns Length of the route segment with |segIdx| in meters.
   double GetSegLenMeters(size_t segIdx) const;
@@ -517,13 +530,24 @@ public:
 
   std::string DebugPrintTurns() const;
 
+  /// \returns list of turns intended for display to the user
   std::vector<RouteStepInfo> GetTurnsForDisplay(std::string const & locale) const;
+  std::optional<uint32_t> GetStepSequenceForTurn(uint32_t turnIndex) const;
+  std::optional<uint32_t> GetNextStepSequence(uint32_t sequence, double maxDistM) const;
+  std::optional<uint32_t> GetTurnIndexForStepSequence(uint32_t sequence) const;
+  /// \returns the point for at a specific turn index along the route
+  m2::PointD GetJunctionPointForTurn(uint32_t segmentIndex) const;
+  /// \returns the approach direction for the turn
+  double GetDirectionForTurn(uint32_t segmentIndex) const;
 
 private:
   friend std::string DebugPrint(Route const & r);
 
   double GetPolySegAngle(size_t ind) const;
   void GetClosestTurnAfterIdx(size_t segIdx, turns::TurnItem & turn) const;
+  bool IsDisplayableTurn(size_t segIdx) const;
+  turns::lanes::LanesInfo const & GetStepLanes(size_t segIdx) const;
+  std::optional<size_t> GetStepSegIdx(uint32_t sequence) const;
 
   /// \returns Estimated time from the beginning.
   double GetCurrentTimeFromBeginSec() const;
@@ -535,6 +559,7 @@ private:
   FollowedPolyline m_poly;
 
   std::vector<RouteSegment> m_routeSegments;
+  std::vector<size_t> m_stepSegIdxs;
   // |m_haveAltitudes| is true if and only if all route points have altitude information.
   bool m_haveAltitudes = false;
 
@@ -552,4 +577,7 @@ private:
 /// \returns true if |turn| is not equal to turns::CarDirection::None or
 /// |turns::PedestrianDirection::None|.
 bool IsNormalTurn(turns::TurnItem const & turn);
+
+void GetFullRoadName(RouteSegment::RoadNameInfo const & road, RoadShieldInfo & roadShields, std::string & name);
+RoadInfo GetRoadInfo(RouteSegment::RoadNameInfo const & road);
 }  // namespace routing
